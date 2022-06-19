@@ -13,10 +13,10 @@ import java.util.Set;
 
 public class HomePage extends BasePage {
 
-    int retry = 2;
     PropertiesManager propertiesManager = new PropertiesManager();
     long longWait = Long.parseLong(propertiesManager.getProperty("long.wait"));
     long shortWait = Long.parseLong(propertiesManager.getProperty("short.wait"));
+    int retry = Integer.parseInt(propertiesManager.getProperty("retry.count"));
 
     @FindBy(xpath = "//a[contains(@aria-label, 'Amazon')]")
     private WebElement logo;

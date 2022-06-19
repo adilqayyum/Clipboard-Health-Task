@@ -1,6 +1,8 @@
 package com.web.automatedtest.infrastructure.driver;
 
 
+import net.bytebuddy.implementation.bytecode.Throw;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -15,12 +17,10 @@ public class PropertiesManager {
         try {
             // load a properties file for reading
             prop.load(Files.newInputStream(Paths.get("src/test/resources/config.properties")));
-            return prop.getProperty(propertyName);
         }
         catch (Exception ex){
-            System.out.println(ex);
+            ex.printStackTrace();
         }
-
-        return propertyName;
+        return prop.getProperty(propertyName);
     }
 }
