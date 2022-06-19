@@ -7,6 +7,10 @@ Feature: Home Page
     When Click on Hamburger Button
     And Click on Value "TV, Appliances, Electronics"
     And Click on Value "Televisions"
+    Then Click on Checkbox Value "Samsung"
+    And Click on Value "Featured"
+    Then Click on Dropdown Value "Price: High to Low"
+    And Click on Item Value "2"
 
     Examples:
       | URL |

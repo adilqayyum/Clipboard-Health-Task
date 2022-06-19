@@ -38,6 +38,16 @@ public class HomePageSteps {
         this.homePage.clickOnValue(value);
     }
 
+    @And("^Click on Item Value \"([^\"]*)\"$")
+    public void clickOnItemValue(String value) {
+        this.homePage.clickOnItemValue(value);
+    }
+
+    @And("^Click on Checkbox Value \"([^\"]*)\"$")
+    public void clickOnCheckboxValue(String value) {
+        this.homePage.clickOnCheckboxValue(value);
+    }
+
     @And("^Select Form Value \"([^\"]*)\"$")
     public void selectText(String value) {
         this.homePage.selectText(value);

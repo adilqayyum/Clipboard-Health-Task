@@ -20,12 +20,14 @@ public class HomePage extends BasePage{
     @FindBy(xpath = "//body/div[@id='a-page']/div[2]/div[2]/div[2]/div[1]/div[1]/div[20]/ul[1]/li[1]/span[1]/a[1]/div[1]/label[1]/i[1]")
     private WebElement samsung;
 
+
     HomePage() {
         PageFactory.initElements(driver, this);
     }
 
     void goToPage(String url){
         driver.get(url);
+        driver.manage().window().maximize();
         wait.forLoading(Duration.ofSeconds(5));
     }
 
@@ -50,9 +52,25 @@ public class HomePage extends BasePage{
         textElement.click();
     }
 
+    void clickOnCheckboxValue(String spanText) {
+        WebElement textElement = driver.findElement(
+                By.xpath("//span[text()='"+spanText+"']//preceding-sibling::div[@class='a-checkbox a-checkbox-fancy aok-float-left apb-browse-refinements-checkbox']"));
+        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                "Span Value");
+        textElement.click();
+    }
+
     void clickOnDropdownValue(String spanText) {
         WebElement textElement = driver.findElement(
-                By.xpath("//*[@class='language-picker-component']//*[contains(text(), '"+spanText+"')]"));
+                By.xpath("//*[@class='a-popover-inner']//*[contains(text(), '"+spanText+"')]"));
+        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                "Span Value");
+        textElement.click();
+    }
+
+    void clickOnItemValue(String spanText) {
+        WebElement textElement = driver.findElement(
+                By.xpath("(//span[@class=\"a-size-base-plus a-color-base a-text-normal\"])["+spanText+"]"));
         wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
                 "Span Value");
         textElement.click();
