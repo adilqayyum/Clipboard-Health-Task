@@ -2,6 +2,7 @@ package com.web.automatedtest.infrastructure.driver;
 
 import io.cucumber.java.Before;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,20 +26,24 @@ public class Setup {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.addArguments("['start-maximized']");
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+                chromeOptions.addArguments("--enable-javascript");
+                chromeOptions.addArguments("--disable-notifications");
                 driver = new ChromeDriver(chromeOptions);
-                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
-                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
                 driver.manage().window().maximize();
                 break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
-                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
                 driver.manage().window().maximize();
                 break;
             default:

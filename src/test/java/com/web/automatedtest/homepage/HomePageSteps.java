@@ -38,6 +38,11 @@ public class HomePageSteps {
         this.homePage.clickOnValue(value);
     }
 
+    @And("^Click on Sorting$")
+    public void clickOnSorting() {
+        this.homePage.clickSorting();
+    }
+
     @And("^Click on Item Value \"([^\"]*)\"$")
     public void clickOnItemValue(String value) {
         this.homePage.clickOnItemValue(value);
@@ -48,9 +53,9 @@ public class HomePageSteps {
         this.homePage.clickOnCheckboxValue(value);
     }
 
-    @And("^Select Form Value \"([^\"]*)\"$")
-    public void selectText(String value) {
-        this.homePage.selectText(value);
+    @And("^Switch to New Window$")
+    public void switchWindow() {
+        this.homePage.switchToChildWindow();
     }
 
     @Then("^page title is \"([^\"]*)\"$")
@@ -58,5 +63,11 @@ public class HomePageSteps {
         String displayedTitle = this.homePage.getTitle();
         Assert.assertEquals("Displayed title is " + displayedTitle +
                 " instead of " + title, title, displayedTitle);
+    }
+
+    @Then("^Text \"([^\"]*)\" is present")
+    public void textIsPresent(String text) {
+        String displayedText = this.homePage.getText();
+        Assert.assertEquals(displayedText, text);
     }
 }

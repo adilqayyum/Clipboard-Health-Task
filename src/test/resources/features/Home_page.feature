@@ -8,9 +8,11 @@ Feature: Home Page
     And Click on Value "TV, Appliances, Electronics"
     And Click on Value "Televisions"
     Then Click on Checkbox Value "Samsung"
-    And Click on Value "Featured"
+    And Click on Sorting
     Then Click on Dropdown Value "Price: High to Low"
     And Click on Item Value "2"
+    Then Switch to New Window
+    And Text "About this item" is present
 
     Examples:
       | URL |

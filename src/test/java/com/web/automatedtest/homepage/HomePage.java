@@ -1,15 +1,22 @@
 package com.web.automatedtest.homepage;
 
 import com.web.automatedtest.basepage.BasePage;
+import com.web.automatedtest.infrastructure.driver.PropertiesManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.time.Duration;
+import java.util.Set;
 
 
-public class HomePage extends BasePage{
+public class HomePage extends BasePage {
+
+    int retry = 2;
+    PropertiesManager propertiesManager = new PropertiesManager();
+    long longWait = Long.parseLong(propertiesManager.getProperty("long.wait"));
+    long shortWait = Long.parseLong(propertiesManager.getProperty("short.wait"));
 
     @FindBy(xpath = "//a[contains(@aria-label, 'Amazon')]")
     private WebElement logo;
@@ -17,70 +24,94 @@ public class HomePage extends BasePage{
     @FindBy(xpath = "//header/div[@id='navbar']/div[@id='nav-main']/div[1]/a[1]/i[1]")
     private WebElement hamburger;
 
-    @FindBy(xpath = "//body/div[@id='a-page']/div[2]/div[2]/div[2]/div[1]/div[1]/div[20]/ul[1]/li[1]/span[1]/a[1]/div[1]/label[1]/i[1]")
-    private WebElement samsung;
-
-
     HomePage() {
         PageFactory.initElements(driver, this);
     }
 
-    void goToPage(String url){
+    void goToPage(String url) {
         driver.get(url);
-        driver.manage().window().maximize();
-        wait.forLoading(Duration.ofSeconds(5));
+        wait.forLoading(Duration.ofSeconds(this.shortWait));
     }
 
     void checkLogoDisplay() {
-        wait.forElementToBeDisplayed(Duration.ofSeconds(5), this.logo, "Logo");
+        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), this.logo, "Logo");
     }
+
     String getTitle() {
         return driver.getTitle();
     }
 
     void clickOnHamburgerButton() {
-        wait.forElementToBeDisplayed(Duration.ofSeconds(10), this.hamburger, "hamburger");
+        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), this.hamburger, "hamburger");
         this.hamburger.click();
         wait.forLoading(Duration.ofSeconds(10));
     }
 
     void clickOnValue(String spanText) {
         WebElement textElement = driver.findElement(
-                By.xpath("//*[contains(text(), '"+spanText+"')]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                By.xpath("//*[contains(text(), '" + spanText + "')]"));
+        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
                 "Span Value");
+        textElement.click();
+    }
+
+    void clickSorting() {
+        WebElement textElement = driver.findElement(By.xpath("//span[@class=\"a-button-text a-declarative\"]"));
+        wait.forElementToBeClickable(Duration.ofSeconds(this.shortWait), textElement, "Span Value");
         textElement.click();
     }
 
     void clickOnCheckboxValue(String spanText) {
         WebElement textElement = driver.findElement(
-                By.xpath("//span[text()='"+spanText+"']//preceding-sibling::div[@class='a-checkbox a-checkbox-fancy aok-float-left apb-browse-refinements-checkbox']"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                By.xpath("//span[text()='" + spanText + "']//preceding-sibling::div[@class='a-checkbox a-checkbox-fancy aok-float-left apb-browse-refinements-checkbox']"));
+        wait.forElementToBeClickable(Duration.ofSeconds(this.longWait), textElement,
                 "Span Value");
         textElement.click();
     }
 
     void clickOnDropdownValue(String spanText) {
-        WebElement textElement = driver.findElement(
-                By.xpath("//*[@class='a-popover-inner']//*[contains(text(), '"+spanText+"')]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
-                "Span Value");
-        textElement.click();
+        try {
+            WebElement textElement = driver.findElement(
+                    By.xpath("//*[@class='a-popover-inner']//*[contains(text(), '" + spanText + "')]"));
+            wait.forElementToBeDisplayed(Duration.ofSeconds(this.longWait), textElement,
+                    "Span Value");
+            textElement.click();
+        }
+        catch (Exception ex){
+            if (retry > 0) {
+                clickSorting();
+                clickOnDropdownValue(spanText);
+                retry--;
+            }
+        }
     }
 
     void clickOnItemValue(String spanText) {
         WebElement textElement = driver.findElement(
-                By.xpath("(//span[@class=\"a-size-base-plus a-color-base a-text-normal\"])["+spanText+"]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                By.xpath("(//span[@class=\"a-size-base-plus a-color-base a-text-normal\"])[" + spanText + "]"));
+        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
                 "Span Value");
         textElement.click();
     }
 
-    void selectText(String labelText) {
+    String getText() {
         WebElement textElement = driver.findElement(
-                By.xpath("//*[@class='questions-page-container']//*[contains(text(), '"+labelText+"')]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(20), textElement,
+                By.xpath("//*[@class='a-size-base-plus a-text-bold']"));
+        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
                 "Label Value");
-        textElement.click();
+        return textElement.getText();
+    }
+
+    void switchToChildWindow() {
+
+        String parent = driver.getWindowHandle();
+        Set<String> s = driver.getWindowHandles();
+
+        for (String child_window : s) {
+
+            if (!parent.equals(child_window)) {
+                driver.switchTo().window(child_window);
+            }
+        }
     }
 }
