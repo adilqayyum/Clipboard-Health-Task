@@ -1,12 +1,8 @@
 package com.web.automatedtest.infrastructure.driver;
 
-
-import net.bytebuddy.implementation.bytecode.Throw;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-
 
 public class PropertiesManager {
 

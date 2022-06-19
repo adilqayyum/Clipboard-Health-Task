@@ -7,7 +7,6 @@ import org.junit.Assert;
 
 public class HomePageSteps {
 
-
     private final HomePage homePage;
 
     public HomePageSteps() {

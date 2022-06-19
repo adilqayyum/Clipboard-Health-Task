@@ -1,7 +1,7 @@
 package com.web.automatedtest.homepage;
 
 import com.web.automatedtest.basepage.BasePage;
-import com.web.automatedtest.infrastructure.driver.PropertiesManager;
+import com.web.automatedtest.infrastructure.driver.Setup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,11 +12,6 @@ import java.util.Set;
 
 
 public class HomePage extends BasePage {
-
-    PropertiesManager propertiesManager = new PropertiesManager();
-    long longWait = Long.parseLong(propertiesManager.getProperty("long.wait"));
-    long shortWait = Long.parseLong(propertiesManager.getProperty("short.wait"));
-    int retry = Integer.parseInt(propertiesManager.getProperty("retry.count"));
 
     @FindBy(xpath = "//a[contains(@aria-label, 'Amazon')]")
     private WebElement logo;
@@ -30,11 +25,11 @@ public class HomePage extends BasePage {
 
     void goToPage(String url) {
         driver.get(url);
-        wait.forLoading(Duration.ofSeconds(this.shortWait));
+        wait.forLoading(Duration.ofSeconds(Setup.shortWait));
     }
 
     void checkLogoDisplay() {
-        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), this.logo, "Logo");
+        wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.shortWait), this.logo, "Logo");
     }
 
     String getTitle() {
@@ -42,7 +37,7 @@ public class HomePage extends BasePage {
     }
 
     void clickOnHamburgerButton() {
-        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), this.hamburger, "hamburger");
+        wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.shortWait), this.hamburger, "hamburger");
         this.hamburger.click();
         wait.forLoading(Duration.ofSeconds(10));
     }
@@ -50,21 +45,21 @@ public class HomePage extends BasePage {
     void clickOnValue(String spanText) {
         WebElement textElement = driver.findElement(
                 By.xpath("//*[contains(text(), '" + spanText + "')]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
+        wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.shortWait), textElement,
                 "Span Value");
         textElement.click();
     }
 
     void clickSorting() {
         WebElement textElement = driver.findElement(By.xpath("//span[@class=\"a-button-text a-declarative\"]"));
-        wait.forElementToBeClickable(Duration.ofSeconds(this.shortWait), textElement, "Span Value");
+        wait.forElementToBeClickable(Duration.ofSeconds(Setup.shortWait), textElement, "Span Value");
         textElement.click();
     }
 
     void clickOnCheckboxValue(String spanText) {
         WebElement textElement = driver.findElement(
                 By.xpath("//span[text()='" + spanText + "']//preceding-sibling::div[@class='a-checkbox a-checkbox-fancy aok-float-left apb-browse-refinements-checkbox']"));
-        wait.forElementToBeClickable(Duration.ofSeconds(this.longWait), textElement,
+        wait.forElementToBeClickable(Duration.ofSeconds(Setup.longWait), textElement,
                 "Span Value");
         textElement.click();
     }
@@ -73,15 +68,15 @@ public class HomePage extends BasePage {
         try {
             WebElement textElement = driver.findElement(
                     By.xpath("//*[@class='a-popover-inner']//*[contains(text(), '" + spanText + "')]"));
-            wait.forElementToBeDisplayed(Duration.ofSeconds(this.longWait), textElement,
+            wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.longWait), textElement,
                     "Span Value");
             textElement.click();
         }
         catch (Exception ex){
-            if (retry > 0) {
+            if (Setup.retry > 0) {
                 clickSorting();
                 clickOnDropdownValue(spanText);
-                retry--;
+                Setup.retry--;
             }
         }
     }
@@ -89,7 +84,7 @@ public class HomePage extends BasePage {
     void clickOnItemValue(String spanText) {
         WebElement textElement = driver.findElement(
                 By.xpath("(//span[@class=\"a-size-base-plus a-color-base a-text-normal\"])[" + spanText + "]"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
+        wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.shortWait), textElement,
                 "Span Value");
         textElement.click();
     }
@@ -97,7 +92,7 @@ public class HomePage extends BasePage {
     String getText() {
         WebElement textElement = driver.findElement(
                 By.xpath("//*[@class='a-size-base-plus a-text-bold']"));
-        wait.forElementToBeDisplayed(Duration.ofSeconds(this.shortWait), textElement,
+        wait.forElementToBeDisplayed(Duration.ofSeconds(Setup.shortWait), textElement,
                 "Label Value");
         return textElement.getText();
     }

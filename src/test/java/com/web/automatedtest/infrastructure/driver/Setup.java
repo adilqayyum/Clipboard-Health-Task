@@ -9,14 +9,18 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 public class Setup {
 
     public static WebDriver driver;
+    static PropertiesManager propertiesManager = new PropertiesManager();
+    public static long longWait = Long.parseLong(propertiesManager.getProperty("long.wait"));
+    public static long shortWait = Long.parseLong(propertiesManager.getProperty("short.wait"));
+    public static int retry = Integer.parseInt(propertiesManager.getProperty("retry.count"));
 
     @Before
-    public void setWebDriver() throws Exception {
+    public void setWebDriver() {
 
         String browser = System.getProperty("browser");
         if (browser == null) {
@@ -32,18 +36,18 @@ public class Setup {
                 chromeOptions.addArguments("--enable-javascript");
                 chromeOptions.addArguments("--disable-notifications");
                 driver = new ChromeDriver(chromeOptions);
-                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(longWait));
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 driver = new FirefoxDriver();
-                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(longWait));
                 driver.manage().window().maximize();
                 break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 driver = new EdgeDriver();
-                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(longWait));
                 driver.manage().window().maximize();
                 break;
             default:
